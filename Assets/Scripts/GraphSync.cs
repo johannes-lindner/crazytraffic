@@ -6,54 +6,54 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor;
 
 public class GraphSync : MonoBehaviour
 {
+    [SerializeField]
+    string dataPath;
+
     [Header("Import")]
-    public string import_fname;
+    public string import_fname = "myGraph.csv";
     public Dictionary<int,SerializableGraphNode> import_nodes = new Dictionary<int, SerializableGraphNode>();
     [SerializeField]
     int import_node_nr;
     public bool import_walkable = false;
 
     [Header("Export")]
-    public string GraphName = "myGraph.csv";
+    [Tooltip("Insert the Filename for your Graph Data here. \nIt will be safed in the Assets/Data directory")]
+    public string export_fname = "myGraph.csv";
     
     [SerializeField]
     public List<SerializableGraphNode> nodes = new List<SerializableGraphNode>();
-    [SerializeField]
-    string export_fpath;
+    
     // Start is called before the first frame update
     void Start()
     {
-        string[] paths = { Application.dataPath, "Data", GraphName };
-        export_fpath = System.IO.Path.Combine(paths);
+        dataPath = System.IO.Path.Join(Application.dataPath, "Data");
     }
 
     public void GetAllNodes()
     {
         var gg = AstarPath.active.data.gridGraph;
 
-        gg.GetNodes(node => {
-            
+        gg.GetNodes(node => {            
             nodes.Add(new SerializableGraphNode(node));
-            
         });
     }
 
-
-
     public void ImportGraph()
     {
-        string import_fname = "C:\\Users\\celsius\\Projects\\0-Diss\\crazytraffic\\Assets\\Data\\myGraph.csv";
+        string fpath = System.IO.Path.Join(dataPath, import_fname);
+        Debug.Log(fpath);
         try
         {
             // Create an instance of StreamReader to read from a file.
             // The using statement also closes the StreamReader.
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(import_fname))
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(fpath))
             {
                 string line;
                 uint c = 0;
@@ -111,11 +111,16 @@ public class GraphSync : MonoBehaviour
 
     public void ExportGraph()
     {
+        if(nodes.Count == 0)
+        {
+            GetAllNodes();
+        }
+        string fpath = System.IO.Path.Join(dataPath, export_fname);
         try
         {
-            using (StreamWriter sw = new StreamWriter(export_fpath))
+            using (StreamWriter sw = new StreamWriter(fpath))
             {
-                sw.WriteLine("nodeIndex, graphIndex, pos_x, pos_y, pos_z, penalty, area, destroyed, flags, tag, walkable");
+                sw.WriteLine("nodeIndex,graphIndex,pos_x,pos_y,pos_z,penalty,area,destroyed,flags,tag,walkable");
                 foreach (SerializableGraphNode node in nodes)
                 {
                     sw.WriteLine(node.ToStringLine());
@@ -127,6 +132,7 @@ public class GraphSync : MonoBehaviour
             Debug.LogError("Export failed: " + e.Message);
         }
     }
+
 }
 
 [System.Serializable]

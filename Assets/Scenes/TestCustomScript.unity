@@ -11308,7 +11308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8061268197018335105, guid: 8fe48f0219583ab45969a2d8908bb481, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8478593839530688998, guid: 8fe48f0219583ab45969a2d8908bb481, type: 3}
       propertyPath: m_Enabled
@@ -12162,73 +12162,6 @@ Transform:
   m_Father: {fileID: 1084724513}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1533649615
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1533649617}
-  - component: {fileID: 1533649616}
-  m_Layer: 0
-  m_Name: GUO (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1533649616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533649615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efee954c69f0d421086729bb8df1137f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  uniqueID: 2420847726025352136
-  points:
-  - {x: 0, y: 0, z: 0}
-  - {x: 2.9453564, y: 0, z: 4.2378254}
-  - {x: -14.043381, y: 0, z: 4.753374}
-  - {x: -12.991571, y: 0, z: -3.0198727}
-  - {x: -0.9858227, y: 0, z: -2.0407944}
-  convex: 0
-  minBoundsHeight: 1
-  penaltyDelta: 700
-  modifyWalkability: 0
-  setWalkability: 0
-  applyOnStart: 1
-  applyOnScan: 1
-  updatePhysics: 0
-  resetPenaltyOnPhysics: 1
-  updateErosion: 1
-  modifyTag: 1
-  setTag: 2
-  legacyMode: 0
-  serializedVersion: 1
-  legacyUseWorldSpace: 0
---- !u!4 &1533649617
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533649615}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.34, y: 0, z: -16.47}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1590458664
 GameObject:
   m_ObjectHideFlags: 0
@@ -12468,12 +12401,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1517405269005684398e0287a21a2764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  import_fname: 
+  dataPath: 
+  import_fname: myGraph.csv
   import_node_nr: 10000
   import_walkable: 0
-  GraphName: myGraph.csv
+  export_fname: myGraph.csv
   nodes: []
-  export_fpath: 
 --- !u!4 &1676717617
 Transform:
   m_ObjectHideFlags: 0
@@ -12487,7 +12420,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1887046229
 GameObject:
@@ -12647,7 +12580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1921017204
 MonoBehaviour:
   m_ObjectHideFlags: 0
