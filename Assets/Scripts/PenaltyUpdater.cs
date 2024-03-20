@@ -44,7 +44,7 @@ public class PenaltyUpdater : MonoBehaviour
         // This is required because we have updated the walkability of some nodes
         var gg = AstarPath.active.data.gridGraph;
         gg.GetNodes(node => gg.CalculateConnections((GridNodeBase)node));
-
+        
         // If you are only updating one or a few nodes you may want to use
         // gg.CalculateConnectionsForCellAndNeighbours only on those nodes instead for performance.
     }

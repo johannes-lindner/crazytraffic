@@ -15,9 +15,19 @@ public class GraphSyncEditor : Editor
             graphSync.GetAllNodes();
         }
 
-        if (GUILayout.Button("Export Graph to json"))
+        if (GUILayout.Button("EXPORT"))
         {
             graphSync.ExportGraph();
+        }
+
+        if(GUILayout.Button("IMPORT"))
+        {
+            graphSync.ImportGraph();
+        }
+
+        if(GUILayout.Button("Update Graph"))
+        {
+            graphSync.UpdateGraph();
         }
     }
 }
