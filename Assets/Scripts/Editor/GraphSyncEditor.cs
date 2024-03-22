@@ -32,6 +32,16 @@ public class GraphSyncEditor : Editor
             graphSync.UpdateGraph();
         }
 
+        if(GUILayout.Button("Import GraphConfig.json"))
+        {
+            graphSync.ImportGraphConfig();
+        }
+
+        if(GUILayout.Button("Create Graph"))
+        {
+            graphSync.CreateGraph();
+        }
+
     }
     //public override VisualElement CreateInspectorGUI()
     //{

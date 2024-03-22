@@ -10,6 +10,8 @@ using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor;
+using System.Xml.Linq;
+using Newtonsoft.Json;
 
 public class GraphSync : MonoBehaviour
 {
@@ -29,11 +31,13 @@ public class GraphSync : MonoBehaviour
     
     [SerializeField]
     public List<SerializableGraphNode> nodes = new List<SerializableGraphNode>();
-    
+
+    public GraphConfig graphConfig;
+
     // Start is called before the first frame update
     void Start()
     {
-        dataPath = System.IO.Path.Join(Application.dataPath, "Data");
+        dataPath = System.IO.Path.Join(Application.dataPath, "Resources");
     }
 
     public void GetAllNodes()
@@ -133,6 +137,79 @@ public class GraphSync : MonoBehaviour
         }
     }
 
+    public void ImportGraphConfig()
+    {
+        string fpath = System.IO.Path.Combine(dataPath, "0_graph_config.json");
+        // Import JSON
+        try
+        {
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(fpath))
+            {
+                string json = sr.ReadToEnd();
+                GraphConfigParser graphConfigPar = JsonConvert.DeserializeObject<GraphConfigParser>(json);
+                graphConfig = new GraphConfig(graphConfigPar);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Could not read json file: " + e.Message);
+        }
+
+        // Copy Background Image
+        try
+        {
+            string fileToCopy = graphConfig.image_path;
+            string destination = System.IO.Path.Join(Application.dataPath, "Resources", System.IO.Path.GetFileName(fileToCopy));
+            File.Copy(fileToCopy, destination);
+            Debug.Log("Copied File: " + destination);
+        }catch(Exception e)
+        {
+            Debug.LogWarning("Failed Copying File: " + e.Message);
+        }
+    }
+
+    public void CreateGraph()
+    {
+        ImportGraphConfig();
+
+
+        // (1) Create Plane to project the image
+        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        plane.name = "Background";
+        plane.transform.position = new Vector3(graphConfig.rectangle_center.x, 0, graphConfig.rectangle_center.y);
+        plane.transform.localScale = new Vector3(graphConfig.rectangle_width / 10f, 1, graphConfig.rectangle_height / 10f);
+
+        //Find the Standard Shader
+        Material BgMaterial = new Material(Shader.Find("Standard"));
+        Texture2D imageAsset = Resources.Load("00_background") as Texture2D;
+        Debug.Log(imageAsset.width);
+        
+        //Set Texture on the material
+        var m_Renderer = plane.GetComponent<MeshRenderer>();
+        //m_Renderer.material.EnableKeyword("_MainTex");
+        BgMaterial.SetTexture("_MainTex", imageAsset);
+        //Apply to GameObject
+        plane.GetComponent<MeshRenderer>().material = BgMaterial;
+
+        
+        //AssetDatabase.CreateAsset(BgMaterial, "Assets/MyMaterial.mat");
+
+        // (2) Create new Graph
+
+        // This holds all graph data
+        AstarData data = AstarPath.active.data;
+
+        // This creates a Grid Graph
+        GridGraph gg = data.AddGraph(typeof(GridGraph)) as GridGraph;
+
+        gg.center = new Vector3(graphConfig.rectangle_center.x, 0, graphConfig.rectangle_center.y);
+
+        // Updates internal size from the above values
+        gg.SetDimensions(graphConfig.rectangle_width, graphConfig.rectangle_height, graphConfig.grid_size);
+        
+        // Scans all graphs
+        AstarPath.active.Scan();
+    }
 }
 
 [System.Serializable]
@@ -148,7 +225,6 @@ public class SerializableGraphNode
     public uint Flags;
     public uint Tag;
     public bool Walkable;
-    
 
     public SerializableGraphNode(GraphNode node)
     {
