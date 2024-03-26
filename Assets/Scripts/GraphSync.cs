@@ -17,10 +17,10 @@ public class GraphSync : MonoBehaviour
 {
     [SerializeField]
     string dataPath;
-
+    
     [Header("Import")]
     public string import_fname = "myGraph.csv";
-    public Dictionary<int,SerializableGraphNode> import_nodes = new Dictionary<int, SerializableGraphNode>();
+    public Dictionary<uint,SerializableGraphNode> import_nodes = new Dictionary<uint, SerializableGraphNode>();
     [SerializeField]
     int import_node_nr;
     public bool import_walkable = false;
@@ -69,7 +69,7 @@ public class GraphSync : MonoBehaviour
                         c++; // Skip header line
                     } else {
                         string[] phrase = line.Split(',');
-                        int NodeIndex = int.Parse(phrase[0]);
+                        uint NodeIndex = uint.Parse(phrase[0]);
                         import_nodes.Add(NodeIndex, new SerializableGraphNode(line));
                     }
                 }
@@ -88,7 +88,7 @@ public class GraphSync : MonoBehaviour
         var gg = AstarPath.active.data.gridGraph;
 
         gg.GetNodes(node => {
-            int index = node.NodeIndex;
+            uint index = node.NodeIndex;
             SerializableGraphNode import_node = import_nodes[index];
             
             node.Penalty = import_node.Penalty;
@@ -204,7 +204,7 @@ public class GraphSync : MonoBehaviour
         // Updates internal size from the above values
         //var width_nodes = graphConfig.rectangle_width * 
         gg.SetDimensions((int) graphConfig.grid_size.x, (int) graphConfig.grid_size.y, graphConfig.raster_size);
-        gg.GetNodes(node => gg.CalculateConnections((GridNodeBase)node));
+        gg.GetNodes(node => gg.CalculateConnections((GridNodeBase)node));// Can maybe be deleted
 
         // Scans all graphs
         AstarPath.active.Scan();
@@ -215,7 +215,7 @@ public class GraphSync : MonoBehaviour
 public class SerializableGraphNode
 {
     // To-do getters und setters
-    public int NodeIndex;
+    public uint NodeIndex;
     public uint GraphIndex;
     public Vector3 position;
     public uint Penalty;
@@ -251,7 +251,7 @@ public class SerializableGraphNode
 
         if (phrase.Length == 11 )
         {
-            NodeIndex = int.Parse(phrase[0]);
+            NodeIndex = uint.Parse(phrase[0]);
             GraphIndex = uint.Parse(phrase[1]);
 
             float pos_x = float.Parse(phrase[2],CurrentCultureInfo);
