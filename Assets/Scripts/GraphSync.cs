@@ -176,8 +176,10 @@ public class GraphSync : MonoBehaviour
         // (1) Create Plane to project the image
         GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.name = "Background";
-        plane.transform.position = new Vector3(graphConfig.rectangle_center.x, 0, graphConfig.rectangle_center.y);
-        plane.transform.localScale = new Vector3(graphConfig.rectangle_width / 10f, 1, graphConfig.rectangle_height / 10f);
+        ImageExtent ie = graphConfig.image_extent;
+        plane.transform.position = new Vector3(ie.xmin + 0.5f * (ie.xmax - ie.xmin), 0, ie.ymin + 0.5f * (ie.ymax - ie.ymin));
+        plane.transform.rotation = Quaternion.Euler(0, 180, 0);
+        plane.transform.localScale = new Vector3((ie.xmax - ie.xmin) / 10f, 1, (ie.ymax - ie.ymin) / 10f); // divide by ten, because default size of plane is 10x10
 
         //Find the Standard Shader
         Material BgMaterial = new Material(Shader.Find("Standard"));
@@ -185,14 +187,9 @@ public class GraphSync : MonoBehaviour
         Debug.Log(imageAsset.width);
         
         //Set Texture on the material
-        var m_Renderer = plane.GetComponent<MeshRenderer>();
-        //m_Renderer.material.EnableKeyword("_MainTex");
         BgMaterial.SetTexture("_MainTex", imageAsset);
         //Apply to GameObject
         plane.GetComponent<MeshRenderer>().material = BgMaterial;
-
-        
-        //AssetDatabase.CreateAsset(BgMaterial, "Assets/MyMaterial.mat");
 
         // (2) Create new Graph
 
@@ -205,8 +202,10 @@ public class GraphSync : MonoBehaviour
         gg.center = new Vector3(graphConfig.rectangle_center.x, 0, graphConfig.rectangle_center.y);
 
         // Updates internal size from the above values
-        gg.SetDimensions(graphConfig.rectangle_width, graphConfig.rectangle_height, graphConfig.grid_size);
-        
+        //var width_nodes = graphConfig.rectangle_width * 
+        gg.SetDimensions((int) graphConfig.grid_size.x, (int) graphConfig.grid_size.y, graphConfig.raster_size);
+        gg.GetNodes(node => gg.CalculateConnections((GridNodeBase)node));
+
         // Scans all graphs
         AstarPath.active.Scan();
     }

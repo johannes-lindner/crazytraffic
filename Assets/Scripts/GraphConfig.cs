@@ -10,7 +10,9 @@ public class GraphConfigParser
     public List<uint> image_shape;
     public string image_path;
     public List<float> rectangle_points;
-    public float grid_size;
+    public float raster_size;
+    public int graph_width;
+    public int graph_heigth;
     public float rectangle_width;
     public float rectangle_height;
     public List<float> rectangle_center;
@@ -49,7 +51,8 @@ public class GraphConfig
     public Vector3 image_shape;
     public string image_path;
     public List<Vector2> rectangle_points;
-    public float grid_size;
+    public float raster_size;
+    public Vector2 grid_size;
     public int rectangle_width;
     public int rectangle_height;
     public Vector2 rectangle_center;
@@ -60,7 +63,8 @@ public class GraphConfig
         image_shape = new Vector3(gcp.image_shape[0], gcp.image_shape[1], gcp.image_shape[2]);
         image_path = gcp.image_path;
         rectangle_points = GetRectanglePoints(gcp.rectangle_points);
-        grid_size = gcp.grid_size;
+        raster_size = gcp.raster_size;
+        grid_size = new Vector2(gcp.graph_width, gcp.graph_heigth);
         rectangle_width = (int) gcp.rectangle_width;
         rectangle_height = (int) gcp.rectangle_height;
         rectangle_center = GetRectangleCenter(gcp.rectangle_center);
